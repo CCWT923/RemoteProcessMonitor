@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteProcessMonitor", "RemoteProcessMonitor\RemoteProcessMonitor.csproj", "{FEC23CD5-3045-4206-995F-2F9EBE86934A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetRemoteProcess", "GetRemoteProcess\GetRemoteProcess.csproj", "{8D4F3C4C-2C58-4127-B1CD-65D7B911E094}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FEC23CD5-3045-4206-995F-2F9EBE86934A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC23CD5-3045-4206-995F-2F9EBE86934A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC23CD5-3045-4206-995F-2F9EBE86934A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D4F3C4C-2C58-4127-B1CD-65D7B911E094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D4F3C4C-2C58-4127-B1CD-65D7B911E094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D4F3C4C-2C58-4127-B1CD-65D7B911E094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D4F3C4C-2C58-4127-B1CD-65D7B911E094}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

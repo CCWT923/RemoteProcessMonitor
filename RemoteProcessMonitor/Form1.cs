@@ -43,21 +43,50 @@ namespace RemoteProcessMonitor
         /// <summary>
         /// 等待一个客户端连接
         /// </summary>
-        private async void WaitConnection()
+        private void WaitConnection()
         {
             //一直等待一个连接
-            remoteClient = await tcpListener.AcceptTcpClientAsync();
+            remoteClient = tcpListener.AcceptTcpClient();
             WriteLog(string.Format("来自{0}的客户端已连接。",remoteClient.Client.LocalEndPoint));
         }
-
+        int BufferSize = 2048;
         private void SendData()
         {
-            using (NetworkStream networkStream = remoteClient.GetStream())
+            //建立和已连接的客户端之间的数据流
+            using (NetworkStream streamToClient = remoteClient.GetStream())
             {
-                //缓存数据
-                Byte[] buffer = new byte[2048];
-                
+                //缓存数组
+                Byte[] buffer = new byte[BufferSize];
+                int readBytes = 0;
+                try
+                {
+                    //锁定数据流，不允许同时操作
+                    lock(streamToClient)
+                    {
+                        readBytes = streamToClient.Read(buffer, 0, BufferSize);
+                    }
+                    //向连接的客户端发送数据
+                    lock(streamToClient)
+                    {
+                        streamToClient.Write(buffer, 0, buffer.Length);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    WriteLog(ex.Message);
+                }
+
+                //释放数据流和连接
+                streamToClient.Dispose();
+                remoteClient.Close();
             }
         }
+
+        private string GetByteString(byte[] buffer)
+        {
+            string str = Encoding.UTF8.GetString(buffer);
+            return str;
+        }
+
     }
 }
