@@ -77,8 +77,8 @@ namespace RemoteProcessMonitor
                 }
 
                 //释放数据流和连接
-                streamToClient.Dispose();
-                remoteClient.Close();
+                //streamToClient.Dispose();
+                //remoteClient.Close();
             }
         }
 
@@ -87,6 +87,5 @@ namespace RemoteProcessMonitor
             string str = Encoding.UTF8.GetString(buffer);
             return str;
         }
-
     }
 }
