@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace RemoteProcessMonitor
 {
@@ -22,13 +23,14 @@ namespace RemoteProcessMonitor
         #region 记录日志
         private void WriteLog(string logString)
         {
-            textBox1.Text += DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + logString + "\n";
+            MessageBox.Show(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + logString);
         }
         #endregion
 
         //服务器端监听器
         TcpListener tcpListener = null;
         IPAddress ip = IPAddress.Parse("127.0.0.1");
+        int port = 19023;
         //一个客户端
         TcpClient remoteClient;
         /// <summary>
@@ -36,7 +38,7 @@ namespace RemoteProcessMonitor
         /// </summary>
         private void StartServer()
         {
-            tcpListener = new TcpListener(ip, 19023);
+            tcpListener = new TcpListener(ip, port);
             tcpListener.Start();
             WriteLog("服务已经启动……");
         }
@@ -82,10 +84,25 @@ namespace RemoteProcessMonitor
             }
         }
 
+        public void Process()
+        {
+            StartServer();
+            WaitConnection();
+        }
+
         private string GetByteString(byte[] buffer)
         {
             string str = Encoding.UTF8.GetString(buffer);
             return str;
+        }
+
+        private void Btn_StartServer_Click(object sender, EventArgs e)
+        {
+            //启动线程
+            Thread thread = new Thread(new ThreadStart(Process));
+            thread.Start();
+            Btn_StartServer.Text = "运行中";
+            Btn_StartServer.Enabled = false;
         }
     }
 }

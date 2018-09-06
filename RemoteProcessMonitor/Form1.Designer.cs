@@ -36,14 +36,18 @@
             // 
             // Btn_StartServer
             // 
+            this.Btn_StartServer.BackColor = System.Drawing.Color.Silver;
+            this.Btn_StartServer.FlatAppearance.BorderSize = 0;
             this.Btn_StartServer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Btn_StartServer.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Btn_StartServer.Location = new System.Drawing.Point(601, 421);
+            this.Btn_StartServer.Location = new System.Drawing.Point(719, 430);
+            this.Btn_StartServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Btn_StartServer.Name = "Btn_StartServer";
-            this.Btn_StartServer.Size = new System.Drawing.Size(146, 39);
+            this.Btn_StartServer.Size = new System.Drawing.Size(140, 45);
             this.Btn_StartServer.TabIndex = 0;
             this.Btn_StartServer.Text = "启动服务";
-            this.Btn_StartServer.UseVisualStyleBackColor = true;
+            this.Btn_StartServer.UseVisualStyleBackColor = false;
+            this.Btn_StartServer.Click += new System.EventHandler(this.Btn_StartServer_Click);
             // 
             // timer1
             // 
@@ -51,20 +55,22 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 12);
+            this.textBox1.Location = new System.Drawing.Point(16, 15);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(735, 401);
+            this.textBox1.Size = new System.Drawing.Size(843, 407);
             this.textBox1.TabIndex = 1;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(759, 470);
+            this.ClientSize = new System.Drawing.Size(872, 487);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Btn_StartServer);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
