@@ -51,9 +51,10 @@ namespace RemoteProcessMonitor
             remoteClient = tcpListener.AcceptTcpClient();
             WriteLog(string.Format("来自{0}的客户端已连接。",remoteClient.Client.LocalEndPoint));
         }
-        int BufferSize = 2048;
+        int BufferSize = 8192;
         private void SendData()
         {
+            
             //建立和已连接的客户端之间的数据流
             using (NetworkStream streamToClient = remoteClient.GetStream())
             {

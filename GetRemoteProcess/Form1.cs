@@ -42,12 +42,19 @@ namespace GetRemoteProcess
             t1.Start();
         }
 
+        /// <summary>
+        /// 连接
+        /// </summary>
         private void Connect()
         {
             TcpClient client = new TcpClient();
             try
             {
                 client.Connect(remoteIp, remotePort);
+                if(client.Connected)
+                {
+                    MessageBox.Show("连接上服务器！");
+                }
             }
             catch(Exception ex)
             {
