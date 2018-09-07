@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Diagnostics;
 
 namespace RemoteProcessMonitor
 {
@@ -70,7 +71,7 @@ namespace RemoteProcessMonitor
         int BufferSize = 8192;
         NetworkStream streamToClient = null;
 
-        private void SendData()
+        private void SendData(string Data)
         {
             if(streamToClient == null)
             {
@@ -78,7 +79,7 @@ namespace RemoteProcessMonitor
             }
 
             //缓存数组
-            Byte[] buffer = new byte[BufferSize];
+            Byte[] buffer = GetByteFromString(Data);
 
             try
             {
@@ -99,10 +100,13 @@ namespace RemoteProcessMonitor
             
         }
 
-        public void Process()
+        public void Proc()
         {
             StartServer();
             WaitConnection();
+            //Todo：这里获取的流对象，是否可以作为参数传递到下一个方法？
+            streamToClient = GetNetworkStream();
+            SendData("你好，客户端！");
         }
         /// <summary>
         /// 将byte数组转换为字符串
@@ -120,7 +124,7 @@ namespace RemoteProcessMonitor
         /// </summary>
         /// <param name="ItemsList"></param>
         /// <returns></returns>
-        private byte[] GetByte(string[] ItemsList)
+        private byte[] GetByteFromStringArray(string[] ItemsList)
         {
             byte[] b;
             string str = "";
@@ -131,19 +135,44 @@ namespace RemoteProcessMonitor
             b = Encoding.UTF8.GetBytes(str);
             return b;
         }
-
+        /// <summary>
+        /// 将字符串转换为字节数组
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <returns></returns>
+        private byte[] GetByteFromString(string Text)
+        {
+            return Encoding.UTF8.GetBytes(Text);
+        }
 
         private void Btn_StartServer_Click(object sender, EventArgs e)
         {
             //启动线程
-            Thread thread = new Thread(new ThreadStart(Process));
+            Thread thread = new Thread(new ThreadStart(Proc));
             thread.Start();
             Btn_StartServer.Text = "运行中";
             Btn_StartServer.Enabled = false;
         }
+        /// <summary>
+        /// 获取所有系统进程名称
+        /// </summary>
+        /// <returns></returns>
+        private string[] GetProcessesName()
+        {
+            Process[] process = Process.GetProcesses();
+            String[] ProcNames = new string[process.Length];
+            int i = 0;
+            foreach(Process p in process)
+            {
+                ProcNames[i++] = p.ProcessName;
+            }
+            return ProcNames;
+        }
 
-
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SendData(GetByteString(GetByteFromStringArray(GetProcessesName())));
+        }
     }
 }
 //https://www.cnblogs.com/jamesping/articles/2071932.html

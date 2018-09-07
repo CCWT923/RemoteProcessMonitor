@@ -48,13 +48,27 @@ namespace GetRemoteProcess
         private void Connect()
         {
             TcpClient client = new TcpClient();
+            NetworkStream streamFromServer = null;
+            byte[] buffer = new byte[8192];
+            int bytesRead = 0;
             try
             {
                 client.Connect(remoteIp, remotePort);
                 if(client.Connected)
                 {
                     MessageBox.Show("连接上服务器！");
+                    while (true)
+                    {
+                        streamFromServer = client.GetStream();
+                        //读取数据
+                        lock (streamFromServer)
+                        {
+                            bytesRead = streamFromServer.Read(buffer, 0, buffer.Length);
+                        }
+                        MessageBox.Show(Encoding.UTF8.GetString(buffer));
+                    }
                 }
+
             }
             catch(Exception ex)
             {
