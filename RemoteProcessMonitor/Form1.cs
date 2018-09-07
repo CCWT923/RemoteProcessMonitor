@@ -45,44 +45,58 @@ namespace RemoteProcessMonitor
         /// <summary>
         /// 等待一个客户端连接
         /// </summary>
-        private void WaitConnection()
+        private bool WaitConnection()
         {
+            WriteLog("等待客户端连接……");
             //一直等待一个连接
             remoteClient = tcpListener.AcceptTcpClient();
             WriteLog(string.Format("来自{0}的客户端已连接。",remoteClient.Client.LocalEndPoint));
+            return true ;
         }
+
+        /// <summary>
+        /// 获取网络流
+        /// </summary>
+        /// <returns></returns>
+        private NetworkStream GetNetworkStream()
+        {
+            if(remoteClient.Connected)
+            {
+                return remoteClient.GetStream();
+            }
+            return null;
+        }
+
         int BufferSize = 8192;
+        NetworkStream streamToClient = null;
+
         private void SendData()
         {
-            
-            //建立和已连接的客户端之间的数据流
-            using (NetworkStream streamToClient = remoteClient.GetStream())
+            if(streamToClient == null)
             {
-                //缓存数组
-                Byte[] buffer = new byte[BufferSize];
-                int readBytes = 0;
-                try
-                {
-                    //锁定数据流，不允许同时操作
-                    lock(streamToClient)
-                    {
-                        readBytes = streamToClient.Read(buffer, 0, BufferSize);
-                    }
-                    //向连接的客户端发送数据
-                    lock(streamToClient)
-                    {
-                        streamToClient.Write(buffer, 0, buffer.Length);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    WriteLog(ex.Message);
-                }
-
-                //释放数据流和连接
-                //streamToClient.Dispose();
-                //remoteClient.Close();
+                streamToClient = GetNetworkStream();
             }
+
+            //缓存数组
+            Byte[] buffer = new byte[BufferSize];
+
+            try
+            {
+                //向连接的客户端发送数据
+                lock(streamToClient)
+                {
+                    streamToClient.Write(buffer, 0, buffer.Length);
+                }
+            }
+            catch(Exception ex)
+            {
+                WriteLog(ex.Message);
+            }
+
+            //释放数据流和连接
+            //streamToClient.Dispose();
+            //remoteClient.Close();
+            
         }
 
         public void Process()
@@ -90,12 +104,34 @@ namespace RemoteProcessMonitor
             StartServer();
             WaitConnection();
         }
-
+        /// <summary>
+        /// 将byte数组转换为字符串
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         private string GetByteString(byte[] buffer)
         {
             string str = Encoding.UTF8.GetString(buffer);
             return str;
         }
+
+        /// <summary>
+        /// 字符串数组转为字节数组
+        /// </summary>
+        /// <param name="ItemsList"></param>
+        /// <returns></returns>
+        private byte[] GetByte(string[] ItemsList)
+        {
+            byte[] b;
+            string str = "";
+            foreach(string s in ItemsList)
+            {
+                str += s + "|";
+            }
+            b = Encoding.UTF8.GetBytes(str);
+            return b;
+        }
+
 
         private void Btn_StartServer_Click(object sender, EventArgs e)
         {
@@ -105,6 +141,9 @@ namespace RemoteProcessMonitor
             Btn_StartServer.Text = "运行中";
             Btn_StartServer.Enabled = false;
         }
+
+
+
     }
 }
 //https://www.cnblogs.com/jamesping/articles/2071932.html
